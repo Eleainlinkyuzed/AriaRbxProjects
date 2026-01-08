@@ -26,6 +26,7 @@ end)
 
 StarterGui:SetCore("SendNotification", {
 	Title = "Instant Prompts ✅",
-	Text = "by Kevin",
+	Text = "by Aria",
 	Duration = 5
 })
+
