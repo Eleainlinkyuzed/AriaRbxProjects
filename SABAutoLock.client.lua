@@ -78,22 +78,22 @@ local function autoLock()
 	local success = pcall(function()
 		local baseModel = findPlayerBase()
 		if not baseModel then
-			sendNotification("Auto Lock (SAB)", "Failed to run\nby Kevin")
+			sendNotification("Auto Lock (SAB)", "Failed to run\nby Aria")
 			return
 		end
 		local touchPart = getTouchPart(baseModel)
 		if not touchPart then
-			sendNotification("Auto Lock (SAB)", "Failed to run\nby Kevin")
+			sendNotification("Auto Lock (SAB)", "Failed to run\nby Aria")
 			return
 		end
 		local timeLabel = getTimeLabel(touchPart)
 		if not timeLabel then
-			sendNotification("Auto Lock (SAB)", "Failed to run\nby Kevin")
+			sendNotification("Auto Lock (SAB)", "Failed to run\nby Aria")
 			return
 		end
 		local _, hrp = waitForCharacter()
 		if not hrp then
-			sendNotification("Auto Lock (SAB)", "Failed to run\nby Kevin")
+			sendNotification("Auto Lock (SAB)", "Failed to run\nby Aria")
 			return
 		end
 		local savedCFrame = hrp.CFrame
@@ -127,7 +127,7 @@ local function autoLock()
 		restorePosition(hrp, savedCFrame)
 	end)
 	if not success then
-		sendNotification("Auto Lock (SAB)", "Failed to run\nDESCRIPTION: There was an error\nby Kevin")
+		sendNotification("Auto Lock (SAB)", "Failed to run\nDESCRIPTION: There was an error\nby Aria")
 	end
 end
 
@@ -141,7 +141,7 @@ local function loopAutoLock()
 end
 
 
-sendNotification("Auto Lock (SAB)", "by Kevin")
+sendNotification("Auto Lock (SAB)", "by Aria")
 loopAutoLock()
 
 LocalPlayer.CharacterAdded:Connect(loopAutoLock)
@@ -154,4 +154,5 @@ while true do
 		-- Safety logic can be added here if needed
 	end
 	wait(0.2)
+
 end
