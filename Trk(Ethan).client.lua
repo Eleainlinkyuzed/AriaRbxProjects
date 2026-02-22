@@ -7,6 +7,25 @@ local humanoid = character:WaitForChild("Humanoid")
 local flingSpeed = 10000
 local flingActive = false
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+
+-- Prevent the script from being executed twice
+local global_env = (type(getgenv) == "function" and getgenv() or _G)
+if global_env.TRKLoaded then
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {Title = "TRK Fling", Text = "Already running", Duration = 2})
+    end)
+    return
+end
+global_env.TRKLoaded = true
+local function notify(title, text)
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {Title = title, Text = text, Duration = 2})
+    end)
+end
+
+-- Startup notification
+notify("TRK fling", "Made by Ethan")
 
 -- Listen for chat commands
 player.Chatted:Connect(function(msg)
@@ -16,24 +35,25 @@ player.Chatted:Connect(function(msg)
             print("WalkFling Activated!")
             
             -- Start fling loop
+            notify("WalkFling", "On")
             spawn(function()
                 while flingActive do
                     local character = player.Character
                     local root = character and character:FindFirstChild("HumanoidRootPart")
-                    
+
                     if character and character.Parent and root and root.Parent then
                         local vel = root.Velocity
                         local movel = 0.1
-                        
+
                         -- Apply extreme velocity to fling others via collision
                         root.Velocity = vel * flingSpeed + Vector3.new(0, flingSpeed, 0)
-                        
+
                         RunService.RenderStepped:Wait()
                         -- Restore velocity so local player doesn't get flung
                         if character and character.Parent and root and root.Parent then
                             root.Velocity = vel
                         end
-                        
+
                         RunService.Stepped:Wait()
                         -- Add slight alternating movement to keep momentum
                         if character and character.Parent and root and root.Parent then
@@ -41,13 +61,28 @@ player.Chatted:Connect(function(msg)
                             movel = movel * -1
                         end
                     end
-                    
+
                     RunService.Heartbeat:Wait()
                 end
             end)
         end
     elseif msg:lower() == "/trkstop" then 
+        if not flingActive then
+            notify("WalkFling", "Not active")
+            return
+        end
         flingActive = false
+        notify("WalkFling", "Off")
         print("WalkFling Deactivated!")
     end
 end)
+
+-- If the humanoid dies while flinging, disable it and notify
+if humanoid then
+    humanoid.Died:Connect(function()
+        if flingActive then
+            flingActive = false
+            notify("WalkFling", "Disabled (Died)")
+        end
+    end)
+end
